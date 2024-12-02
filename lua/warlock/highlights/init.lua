@@ -19,18 +19,47 @@ local highlights = {}
 ---@field treesitter table<string, warlock.Highlight>
 ---@field languages table<string, warlock.Highlight>
 
+local categories = {
+    "editor",
+    "languages",
+    "lsp",
+    "plugins",
+    "syntax",
+    "terminal",
+    "treesitter",
+}
+
+local plugins = {
+    "cmp",
+    "dapui",
+    "dashboard",
+    "diffview",
+    "gitsigns",
+    "indentblankline",
+    "neogit",
+    "telescope",
+    "todo-comments",
+    "treesitter",
+}
+
 --- Create highlights from a palette of colors
----@param colors table<string, string>
+---@param palette warlock.Palette
+---@param config warlock.Config
 ---@return warlock.Highlights
-function highlights.create(colors)
-    return {
-        editor = require("warlock.highlights.editor").create(colors),
-        languages = require("warlock.highlights.languages").create(colors),
-        lsp = require("warlock.highlights.lsp").create(colors),
-        plugins = require("warlock.highlights.plugins").create(colors),
-        terminal = require("warlock.highlights.terminal").create(colors),
-        treesitter = require("warlock.highlights.treesitter").create(colors),
-    }
+function highlights.create(palette, config)
+    local hls = {}
+
+    for _, category in ipairs(categories) do
+        local group = require("warlock.highlights." .. category)
+        hls[category] = group.create(palette, config)
+    end
+
+    -- for _, plugin in ipairs(plugins) do
+    --     local group = require("warlock.highlights.plugins." .. plugin)
+    --     hls[plugin] = group.create(palette, config)
+    -- end
+    --
+    return hls
 end
 
 return highlights

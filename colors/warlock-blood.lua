@@ -1,1 +1,1 @@
-require("warlock").load("blood")
+require("warlock").load({ theme = "blood" })

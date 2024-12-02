@@ -1,1 +1,1 @@
-require("warlock").load("default")
+require("warlock").load({ theme = "default" })

@@ -1,1 +1,1 @@
-require("warlock").load("bone")
+require("warlock").load({ theme = "bone" })
