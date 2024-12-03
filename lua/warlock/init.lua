@@ -5,8 +5,30 @@ local config = require("warlock.config")
 ---@class warlock.LoadOptions
 ---@field theme "default" | "blood" | "bone" | "venom"
 
+---@param theme string
+---@return boolean
 local function validate_theme(theme)
     return vim.tbl_contains({ "default", "blood", "bone", "venom" }, theme)
+end
+
+---@param highlights table<string, warlock.Highlight>
+---@param overrides table<string, warlock.HighlightOverride>
+local function apply_overrides(highlights, overrides)
+    for name, value in pairs(overrides) do
+        local strategy = value.strategy or "merge"
+
+        if not highlights[name] then
+            error(("Cannot override unknown highlight group '%s'"):format(name))
+        end
+
+        if strategy == "merge" then
+            highlights[name] = vim.tbl_extend(highlights[name], value)
+        elseif strategy == "replace" then
+            highlights[name] = value
+        else
+            error(("Unknown override strategy '%s'"):format(strategy))
+        end
+    end
 end
 
 --- Load a theme
@@ -36,11 +58,14 @@ function warlock.load(options)
 
     local theme_palette = require("warlock.themes." .. options.theme).palette()
 
+    -- TODO: Set highlights directly and all at top-level
     local highlights = vim.tbl_extend(
         "force",
         require("warlock.highlights").create(theme_palette, config),
         {} -- config.overrides
     )
+
+    apply_overrides(highlights, config.overrides)
 
     vim.print(vim.inspect(highlights.syntax.Function))
 

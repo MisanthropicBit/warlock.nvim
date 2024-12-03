@@ -35,7 +35,7 @@ local plugins = {
     "dashboard",
     "diffview",
     "gitsigns",
-    "indentblankline",
+    "indent-blankline",
     "neogit",
     "telescope",
     "todo-comments",
@@ -54,11 +54,11 @@ function highlights.create(palette, config)
         hls[category] = group.create(palette, config)
     end
 
-    -- for _, plugin in ipairs(plugins) do
-    --     local group = require("warlock.highlights.plugins." .. plugin)
-    --     hls[plugin] = group.create(palette, config)
-    -- end
-    --
+    for _, plugin in ipairs(plugins) do
+        local group = require("warlock.highlights.plugins." .. plugin)
+        hls[plugin] = group.create(palette, config)
+    end
+
     return hls
 end
 

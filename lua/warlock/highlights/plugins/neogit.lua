@@ -1,6 +1,5 @@
 local neogit = {}
 
---- Highlights related to the editor itself
 ---@param palette warlock.Palette
 ---@param config warlock.Config
 ---@return table<string, warlock.Highlight>

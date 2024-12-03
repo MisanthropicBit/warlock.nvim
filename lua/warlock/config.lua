@@ -4,13 +4,18 @@ local config_loaded = false
 
 ---@class warlock.Style
 ---@field italic boolean?
+---@field bold   boolean?
 
 ---@alias warlock.Styles table<string, warlock.Style>
 
 ---@class warlock.Config
+---@field overrides       table<string, warlock.Highlight>
 ---@field terminal_colors boolean
 ---@field transparent     boolean
 ---@field styles          warlock.Styles
+
+---@class warlock.HighlightOverride : warlock.Highlight
+---@field strategy ("merge" | "replace")?
 
 local default_config = {
     overrides = {},
@@ -28,14 +33,18 @@ local default_config = {
 
 local _user_config = default_config
 
+local function overrides_validator()
+end
+
+local function styles_validator()
+end
+
 -- stylua: ignore start
 local config_schema = {
-    overrides = {
-    },
+    overrides = { overrides_validator, "a valid overrides table" },
     terminal_colors = "boolean",
-    styles = {
-        comments = {}
-    }
+    transparent = "boolean",
+    styles = { styles_validator, "a valid styles table" }
 }
 -- stylua: ignore end
 
